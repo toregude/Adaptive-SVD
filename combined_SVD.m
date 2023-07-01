@@ -31,19 +31,19 @@ function [U_dash, S_dash, V_dash] =combined_SVD(U, S, V, a)
         V1_base = [V(:, 1:m), zeros(n, 1); zeros(1, m), 1];
         V2_temp = [ V(:, m+1:n); zeros(1, n-m)];
         V2_dash = [V1_base * u(:, m+1), V2_temp]; 
-        V_dash = [V1_base * u(:, 1:m), V2_dash];
-        S_dash = [s(1:m, 1:m); zeros(n-m+1, m)]';
         U_dash = U * Q;
+        S_dash = [s(1:m, 1:m); zeros(n-m+1, m)]';
+        V_dash = [V1_base * u(:, 1:m), V2_dash];
     else
         U1 = U(:, 1:n);
         U2 = U(:, n+1:m);
         z2 = U2' * a;
         reflectionVector = z2 / norm(z2) - [1; zeros(m-n-1, 1)];
         [W, Omega_dash, Q] = svd([S(1:n, 1:n), zeros(n, 1); a'*U1, norm(z2)]);
-        V_dash = [V, zeros(n, 1); zeros(1, n), 1]* W;
         U_dash2 = U2-2*((U2*reflectionVector)*reflectionVector')/(reflectionVector' * reflectionVector);
         U1_dash = [U1, U_dash2(1:m, 1)] * Q;
         U_dash = [U1_dash, U_dash2(1:m, 2:m-n)];
         S_dash = [Omega_dash, zeros(n+1, m-n-1)]';
+        V_dash = [V, zeros(n, 1); zeros(1, n), 1]* W;
     end
 end

@@ -1,6 +1,3 @@
-%%The function is working, but sometimes when m=n, the result becomes NaN
-%%which affects the results ongoing. 
-
 function [U_dash, S_dash, V_dash] = update_SVD(U, S, V, a)
     [m, n] = size(S);
     if m<=n
@@ -20,9 +17,9 @@ function [U_dash, S_dash, V_dash] = update_SVD(U, S, V, a)
         V2_temp = [V2; zeros(1, n-m)];
         V2_dash = [w_dash, V2_temp];
          
-        V_dash = [V1_dash, V2_dash];
-        S_dash = [Omega; zeros(n-m+1, m)]';
         U_dash = U * Q;
+        S_dash = [Omega; zeros(n-m+1, m)]';
+        V_dash = [V1_dash, V2_dash];
     else
         U1 = U(:, 1:n);
         U2 = U(:, n+1:m);
@@ -35,14 +32,10 @@ function [U_dash, S_dash, V_dash] = update_SVD(U, S, V, a)
         z2_normalized = z2 / norm(z2);
         
         reflectionVector = z2_normalized - [1; zeros(m-n-1, 1)];
-        %H = eye(length(z2_normalized)) - 2 * (reflectionVector * reflectionVector') / (reflectionVector' * reflectionVector);
         
         [W, Omega_dash, Q] = svd([D, zeros(n, 1); z1', norm(z2)]);
-        
-        V_dash = [V, zeros(n, 1); zeros(1, n), 1]* W;
-        % V_dash = U_dash * W;
-        
-        %V_dash2 = V2 * H;
+       
+
         U_dash2 = U2-2*((U2*reflectionVector)*reflectionVector')/(reflectionVector' * reflectionVector);
         v = U_dash2(1:m, 1);
         U2_dash = U_dash2(1:m, 2:m-n);
@@ -51,5 +44,6 @@ function [U_dash, S_dash, V_dash] = update_SVD(U, S, V, a)
         
         U_dash = [U1_dash, U2_dash];
         S_dash = [Omega_dash, zeros(n+1, m-n-1)]';
+        V_dash = [V, zeros(n, 1); zeros(1, n), 1]* W;
     end
 end
