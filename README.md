@@ -1,5 +1,5 @@
 # Adaptive-SVD
-Reasearch internship at TUM, implementation of algorithms for updating and downdating the SVD of a matrix as used in Hakel factorization in a LTV system. Following files are included, four Matlab files and one report
+Reasearch internship at TUM, implementation of algorithms for updating and downdating the SVD of a matrix as used in Hakel factorization in a LTV system. Following files are included, four Matlab files and one report. Algorithms are based on algorithms presented by Ming Gu and Stanley C. Eisenstadt
 
 main.m
 
